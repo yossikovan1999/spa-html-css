@@ -1,0 +1,89 @@
+html {
+  font-size: 10px;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+header ul {
+  list-style: none;
+}
+
+article img {
+  width: 100px;
+  height: 100px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.article-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.article-header-text h2 {
+  font-size: 2.5rem;
+  padding: 0;
+  margin: 0;
+}
+
+.article-header-text h3 {
+  font-size: 1.6rem;
+  padding: 0;
+  margin: 0;
+  color: rgb(126, 126, 126);
+  font-weight: 500;
+}
+
+.text-paragraph {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  overflow: hidden;
+  max-height: 3.6em;
+  line-height: 1.8em;
+  font-size: 1.6rem;
+}
+
+.article {
+  padding: 1.5rem;
+  background-color: rgb(223, 223, 223);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.articles-links-page {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.input-container {
+  margin: 1rem;
+}
+
+.create-article {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  justify-content: center;
+}
+
+label {
+  font-size: 1.3rem;
+}
+
+.create-article input {
+  width: 100%;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  font-size: 1.5rem;
+}
+
+.create-article textarea {
+  width: 100%;
+  box-sizing: border-box;
+}
