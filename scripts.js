@@ -1,6 +1,5 @@
 const URL = `
-https://gnews.io/api/v4/search?q=Google&lang=en&max=5&apikey=
-10a443860df0d86403a8b407120b79b8
+https://newsapi.org/v2/top-headlines?country=us&apiKey=b90df0c2693b4cb58c44f10e3880ba00
 `;
 
 const articleLinks = (() => {
@@ -8,25 +7,31 @@ const articleLinks = (() => {
   const createArtcilePage = document.getElementById("create-article");
   const articles = document.getElementById("articles");
 
-  function createArticleLink(writer, articleHeader, articleText) {
+  function createArticleLink(articleData) {
     const article = document.createElement("article");
 
     article.classList.add("article");
 
+    console.log(articleData.content);
+
     const articleHtmlString = `
           <div class="article-header">
-            <img src="./jhon-doe.jpg" />
+            <img class=article-link-img src=${articleData.urlToImage} />
             <div class="article-header-text">
-              <h3>${writer.value.trim()}</h3>
-              <h2>${articleHeader.value.trim()}</h2>
+              <h3 class=text-paragraph>${articleData?.source?.name}</h3>
+              <h2 class=text-paragraph>${articleData.title}</h2>
             </div>
           </div>
-          <p class="text-paragraph">${articleText.value.trim()}</p>
+          <p class="text-paragraph">${articleData.content}</p>
         `;
-    
-    article.addEventListener('click', articlePage.showArticle);
-    
+
+    article.innerHTML = articleHtmlString;
+
+    article.addEventListener("click", articlePage.showArticle);
+
     linksPage.appendChild(article);
+
+    console.log(linksPage);
   }
 
   function articlesLinkPage() {
@@ -39,11 +44,48 @@ const articleLinks = (() => {
 })();
 
 const articlePage = (() => {
-  function hideOtherPager() {}
+  const linksPage = document.getElementById("articles-links-page");
+  const createArtcilePage = document.getElementById("create-article");
+  const article = document.getElementById("articles");
+
+  function hideOtherPages() {
+    linksPage.style.display = "none";
+    createArtcilePage.style.display = "none";
+    article.style.display = "block";
+  }
 
   function showArticle(event) {
     const articleLink = event.currentTarget;
+
+    console.log(articleLink);
+
+    const publisher = articleLink.getElementsByTagName("h3");
+    const title = articleLink.getElementsByTagName("h2");
+    const content = articleLink.getElementsByTagName("p");
+    const img = articleLink.querySelector(".article-link-img");
+
+    console.log(typeof publisher.item(0));
+
+    console.log(typeof publisher);
+
+    console.log(img);
+
+    const articleDiv = `
+      <article class="full-article">
+            <img src=${img.src}>
+             <h2>${title.item(0).innerHTML}</h2>
+            <h3>${publisher.item(0).innerHTML}</h3>
+            <p>
+             ${content.item(0).innerHTML} 
+            </p>
+      </article>
+    `;
+
+    article.innerHTML = articleDiv;
+    hideOtherPages();
   }
+
+  return { showArticle };
 })();
 
 const createArticle = (() => {
@@ -70,12 +112,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   const createArticleBtn = document.getElementById("create-article-btn");
 
   const sources = await fetch(URL);
-  const json = await sources.json()
-  
-  for(const article of json.articles){
-    articleLinks.createArticleLink(article?.source?.name, article.title ,article.content);
+  const json = await sources.json();
+
+  for (const article of json.articles) {
+    console.log(article);
+
+    articleLinks.createArticleLink(article);
   }
-  
+
   form.addEventListener("submit", createArticle.addArticle);
   createArticleBtn.addEventListener("click", createArticle.createArticlePage);
   articleLinksBtn.addEventListener("click", articleLinks.articlesLinkPage);
