@@ -16,7 +16,7 @@ const loacalStorageHander = (() => {
 
   async function addToDom() {
     const articles = await JSON.parse(localStorage.getItem("articles")) || [];
-    console.log(articles);
+
     
     for (const article of articles) {
       articleLinks.createArticleLink(
@@ -58,7 +58,7 @@ const articleLinks = (() => {
 
     linksPage.appendChild(article);
 
-    console.log(linksPage);
+
   }
 
   function articlesLinkPage() {
@@ -84,19 +84,12 @@ const articlePage = (() => {
   function showArticle(event) {
     const articleLink = event.currentTarget;
 
-    console.log(articleLink);
-
     const publisher = articleLink.getElementsByTagName("h3");
     const title = articleLink.getElementsByTagName("h2");
     const content = articleLink.getElementsByTagName("p");
     const img = articleLink.querySelector(".article-link-img");
 
-    console.log(typeof publisher.item(0));
-
-    console.log(typeof publisher);
-
-    console.log(img);
-
+    
     const articleDiv = `
       <article class="full-article">
             <img src=${img.src}>
@@ -174,7 +167,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const json = await sources.json();
 
   for (const article of json.articles) {
-    console.log(article);
 
     articleLinks.createArticleLink(
       article.urlToImage,
