@@ -41,12 +41,11 @@ header ul button:hover {
   cursor: pointer;
 }
 
-.d-none {
-  display: none;
-}
 
-.d-block {
-  display: block;
+main{
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 article img {
@@ -76,19 +75,22 @@ article img {
   font-weight: 500;
 }
 
-articles-links-page h3{
-  
+.article-header h2{
+  overflow: hidden;
+   display: -webkit-box;
+   -webkit-line-clamp: 2; /* number of lines to show */
+           line-clamp: 2; 
+   -webkit-box-orient: vertical;
 }
 
 .text-paragraph {
-  display: block;
   overflow: hidden;
-  text-overflow: ellipsis;
-  word-wrap: break-word;
-  overflow: hidden;
-  max-height: 3.6em;
-  line-height: 1.8em;
-  font-size: 1.6rem;
+   display: -webkit-box;
+   -webkit-line-clamp: 2; /* number of lines to show */
+           line-clamp: 2; 
+   -webkit-box-orient: vertical;
+   font-size: 1.5rem;
+
 }
 
 .article {
@@ -170,6 +172,12 @@ form .input-container input {
   outline: none;
 }
 
+form .img-input {
+  border: none;
+  padding : 5px;
+  outline: none;
+}
+
 form .input-container textarea {
   border: 2px solid rgb(160, 160, 160);
   border-radius: 0.6rem;
@@ -215,7 +223,7 @@ form .input-container textarea {
   }
 }
 
-@media (min-width: 780px) and (max-width: 1080px) {
+@media (min-width: 780px)  {
   .articles-links-page {
     grid-template-columns: 1fr 1fr;
   }

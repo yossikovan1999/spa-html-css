@@ -2,27 +2,54 @@ const URL = `
 https://newsapi.org/v2/top-headlines?country=us&apiKey=b90df0c2693b4cb58c44f10e3880ba00
 `;
 
+const loacalStorageHander = (() => {
+  async function addToLocalStorage(url, publisher, title, content) {
+        
+    const articles = await JSON.parse(localStorage.getItem("articles")) || [];
+
+    const article = { url, publisher, title, content };
+
+    articles.push(article);
+
+    localStorage.setItem("articles", JSON.stringify(articles));     
+  }
+
+  async function addToDom() {
+    const articles = await JSON.parse(localStorage.getItem("articles")) || [];
+    console.log(articles);
+    
+    for (const article of articles) {
+      articleLinks.createArticleLink(
+        article.url,
+        article.publisher,
+        article.title,
+        article.content,
+      );
+    }
+  }
+
+  return { addToLocalStorage, addToDom };
+})();
+
 const articleLinks = (() => {
   const linksPage = document.getElementById("articles-links-page");
   const createArtcilePage = document.getElementById("create-article");
   const articles = document.getElementById("articles");
 
-  function createArticleLink(articleData) {
+  function createArticleLink(imgUrl, publisher, title, content) {
     const article = document.createElement("article");
 
     article.classList.add("article");
 
-    console.log(articleData.content);
-
     const articleHtmlString = `
           <div class="article-header">
-            <img class=article-link-img src=${articleData.urlToImage} />
+            <img class=article-link-img src=${imgUrl} />
             <div class="article-header-text">
-              <h3 class=text-paragraph>${articleData?.source?.name}</h3>
-              <h2 class=text-paragraph>${articleData.title}</h2>
+              <h3>${publisher || ""}</h3>
+              <h2>${title || ""}</h2>
             </div>
           </div>
-          <p class="text-paragraph">${articleData.content}</p>
+          <p class="text-paragraph">${content || ""}</p>
         `;
 
     article.innerHTML = articleHtmlString;
@@ -93,11 +120,43 @@ const createArticle = (() => {
   const createArtcilePage = document.getElementById("create-article");
   const articles = document.getElementById("articles");
 
+  const fileInput = document.getElementById("img-input");
+  const publisher = document.getElementById("writer");
+  const title = document.getElementById("input-header");
+  const content = document.getElementById("article-text");
+
   function addArticle(event) {
     event.preventDefault();
+
+    const file = fileInput.files[0];
+    const reader = new FileReader();
+
+    reader.addEventListener("load", () => {
+      const url = reader.result;
+      articleLinks.createArticleLink(
+        url,
+        publisher.value,
+        title.value,
+        content.value,
+      );
+
+      loacalStorageHander.addToLocalStorage(url,
+        publisher.value,
+        title.value,
+        content.value)
+    });
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
   }
 
   function createArticlePage() {
+    publisher.value = "";
+    title.value = "";
+    content.value = "";
+    fileInput.value = "";
+
     linksPage.style.display = "none";
     createArtcilePage.style.display = "flex";
     articles.style.display = "none";
@@ -117,8 +176,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   for (const article of json.articles) {
     console.log(article);
 
-    articleLinks.createArticleLink(article);
+    articleLinks.createArticleLink(
+      article.urlToImage,
+      article?.source?.name,
+      article.title,
+      article.content,
+    );
   }
+
+  loacalStorageHander.addToDom();
 
   form.addEventListener("submit", createArticle.addArticle);
   createArticleBtn.addEventListener("click", createArticle.createArticlePage);
